@@ -57,6 +57,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="로그인"
                 android:textSize="16sp"
+                android:enabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

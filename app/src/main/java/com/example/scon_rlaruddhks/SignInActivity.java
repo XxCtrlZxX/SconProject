@@ -3,6 +3,7 @@ package com.example.scon_rlaruddhks;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
+    EditText emailET, passwordET;
     Button signInBtn, signUpBtn;
 
     @Override
