@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +19,7 @@ public class TotoFragment extends Fragment {
         return new TotoFragment();
     }
 
-    Button lup,ldown,rup,rdown;
+    ImageButton lup,ldown,rup,rdown;
     TextView ltext, rtext;
     int left_num = 0, right_num = 0;
     private Context mContext;
@@ -43,45 +44,32 @@ public class TotoFragment extends Fragment {
         ltext = view.findViewById(R.id.score_num1);
         rtext = view.findViewById(R.id.score_num2);
 
-        lup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                left_num++;
-                ltext.setText(left_num);
-            }
+        lup.setOnClickListener(v -> {
+            left_num++;
+            ltext.setText(left_num + "");
         });
-        ldown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-                if(left_num > 0){
-                    left_num--;
-                }
-                else {
-                    Toast.makeText(mContext, "점수는 음수가 될 수 없습니다", Toast.LENGTH_SHORT).show();
-                }
-                ltext.setText(left_num);
+        ldown.setOnClickListener(v -> {
+
+            if(left_num > 0){
+                left_num--;
             }
+            else {
+                Toast.makeText(mContext, "점수는 음수가 될 수 없습니다", Toast.LENGTH_SHORT).show();
+            }
+            ltext.setText(left_num + "");
         });
-        rup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                right_num++;
-                rtext.setText(right_num);
-            }
+        rup.setOnClickListener(v -> {
+            right_num++;
+            rtext.setText(right_num+ "");
         });
-        rdown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (right_num > 0) {
-                    right_num--;
-                }
-                else {
-                    Toast.makeText(mContext, "점수는 음수가 될 수 없습니다", Toast.LENGTH_SHORT).show();
-                }
-                rtext.setText(right_num);
+        rdown.setOnClickListener(v -> {
+            if (right_num > 0) {
+                right_num--;
             }
-                
+            else {
+                Toast.makeText(mContext, "점수는 음수가 될 수 없습니다", Toast.LENGTH_SHORT).show();
+            }
+            rtext.setText(right_num+ "");
         });
         
 
