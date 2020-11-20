@@ -1,6 +1,5 @@
 package com.example.scon_rlaruddhks;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,8 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-//asdasdasd test
 import com.example.scon_rlaruddhks.Util.CheckString;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -22,10 +21,14 @@ public class SignUpActivity extends AppCompatActivity {
 
     private String email, password, nickname;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        mAuth = FirebaseAuth.getInstance();
 
         btnBack = findViewById(R.id.btnBack);
         btnCreate = findViewById(R.id.btnCreate);
@@ -43,11 +46,18 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void CreateAccount() {
-        Toast.makeText(this, "계정이 생성되었습니다.", Toast.LENGTH_SHORT).show();
-        finish();
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "계정이 생성되었습니다.", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(this, "Create Account Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    TextWatcher textChangeListener = new TextWatcher() {
+    private final TextWatcher textChangeListener = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
