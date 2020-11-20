@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+//asdasdasd test
 import com.example.scon_rlaruddhks.Util.CheckString;
 
 public class SignUpActivity extends AppCompatActivity {
