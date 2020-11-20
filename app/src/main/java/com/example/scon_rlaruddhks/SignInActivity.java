@@ -2,6 +2,8 @@ package com.example.scon_rlaruddhks;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -9,16 +11,18 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.scon_rlaruddhks.Util.CheckString;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-
     EditText emailET, passwordET;
     Button signInBtn, signUpBtn;
+
+    private FirebaseAuth mAuth;
+    private String userEmail, userPassword;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,34 +33,53 @@ public class SignInActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         signInBtn = findViewById(R.id.btnSignIn);
-        signInBtn.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        });
-
         signUpBtn = findViewById(R.id.btnGotoSignUp);
+        emailET = findViewById(R.id.emailText);
+        passwordET = findViewById(R.id.passwordText);
+
+        signInBtn.setEnabled(false);
+        signInBtn.setOnClickListener(v -> SignIn());
         signUpBtn.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
+        emailET.addTextChangedListener(textChangeListener);
+        passwordET.addTextChangedListener(textChangeListener);
     }
 
 
-
-    // 스플래시 액티비티로 들어가야 함
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // 유저가 로그인 되어있는지 확인 후 UI 업데이트
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-
-    //Change UI according to user data.
-    private void updateUI(FirebaseUser account){
-        if(account != null) {
-            //Toast.makeText(this,"환영합니다 (id : " + account.getUid() + ")",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }else {
-            Toast.makeText(this, "로그인해주세요", Toast.LENGTH_SHORT).show();
+    private void SignIn() {
+        if (userEmail != null && userPassword != null) {
+            mAuth.signInWithEmailAndPassword(userEmail, userPassword)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                startActivity(new Intent(this, MainActivity.class));
+                                finish();
+                            }
+                        } else {
+                            Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
+
+    private final TextWatcher textChangeListener = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            userEmail = emailET.getText().toString().trim();
+            userPassword = passwordET.getText().toString().trim();
+
+            if (userEmail.length() > 0 && CheckString.isValidEmail(userEmail) && userPassword.length() >= 6)
+                signInBtn.setEnabled(true);
+            else
+                signInBtn.setEnabled(false);
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+        }
+    };
 }
