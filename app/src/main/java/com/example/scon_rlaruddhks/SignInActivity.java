@@ -1,6 +1,8 @@
 package com.example.scon_rlaruddhks;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,7 +40,10 @@ public class SignInActivity extends AppCompatActivity {
         passwordET = findViewById(R.id.passwordText);
 
         signInBtn.setEnabled(false);
-        signInBtn.setOnClickListener(v -> SignIn());
+        signInBtn.setOnClickListener(v -> {
+            LoginTask loginTask = new LoginTask();
+            loginTask.execute();
+        });
         signUpBtn.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
         emailET.addTextChangedListener(textChangeListener);
         passwordET.addTextChangedListener(textChangeListener);
@@ -82,4 +87,29 @@ public class SignInActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {
         }
     };
+
+
+    private class LoginTask extends AsyncTask<Void, Void, Void> {
+        ProgressDialog asyncDialog = new ProgressDialog(SignInActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("로그인 중...");
+            asyncDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            SignIn();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            asyncDialog.dismiss();
+            super.onPostExecute(aVoid);
+        }
+    }
 }
