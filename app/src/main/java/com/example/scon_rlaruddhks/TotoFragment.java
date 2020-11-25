@@ -23,6 +23,7 @@ public class TotoFragment extends Fragment {
     TextView ltext, rtext;
     int left_num = 0, right_num = 0;
     private Context mContext;
+    Button submit;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -43,6 +44,15 @@ public class TotoFragment extends Fragment {
 
         ltext = view.findViewById(R.id.score_num1);
         rtext = view.findViewById(R.id.score_num2);
+
+        submit = view.findViewById(R.id.submit);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // ltext, rtext를 파이어배이스로 전달
+            }
+        });
 
         lup.setOnClickListener(v -> {
             left_num++;
