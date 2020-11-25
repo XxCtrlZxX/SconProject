@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/rankingFragment"
-        android:name="com.example.scon_rlaruddhks.RankingFragment"
+        android:name="com.example.scon_rlaruddhks.Ranking.RankingFragment"
         android:label="RankingFragment" />
     <fragment
         android:id="@+id/highLightFragment"
