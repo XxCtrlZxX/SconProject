@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_toto:
                 tran.replace(R.id.container, TotoFragment.newInstance());
                 break;
+            case R.id.nav_history:
+                tran.replace(R.id.container, HistoryFragment.newInstance());
+                break;
         }
         tran.commit();
     }

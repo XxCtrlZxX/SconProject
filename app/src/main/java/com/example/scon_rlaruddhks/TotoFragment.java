@@ -2,19 +2,19 @@ package com.example.scon_rlaruddhks;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class TotoFragment extends Fragment {
@@ -25,10 +25,12 @@ public class TotoFragment extends Fragment {
 
     private Context mContext;
 
-    NumberPicker score1, score2;
+    EditText team1_text, team2_text;
+    NumberPicker score1_pick, score2_pick;
     Button submit;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -41,23 +43,35 @@ public class TotoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_toto, container, false);
 
-        score1 = view.findViewById(R.id.score_pick1);
-        score2 = view.findViewById(R.id.score_pick2);
+        score1_pick = view.findViewById(R.id.score_pick1);
+        score2_pick = view.findViewById(R.id.score_pick2);
+        team1_text = view.findViewById(R.id.team1_text);
+        team2_text = view.findViewById(R.id.team2_text);
 
-        score1.setMaxValue(20);
-        score1.setMinValue(0);
-        score2.setMaxValue(20);
-        score2.setMinValue(0);
+        score1_pick.setMaxValue(20);
+        score1_pick.setMinValue(0);
+        score2_pick.setMaxValue(20);
+        score2_pick.setMinValue(0);
 
         submit = view.findViewById(R.id.submit);
-        submit.setOnClickListener(view1 -> {
-            Toast.makeText(mContext, score1.getValue() + " : " + score2.getValue(), Toast.LENGTH_SHORT).show();
-        });
+        submit.setOnClickListener(view1 -> LoadScore());
 
         return view;
     }
 
     private void LoadScore() {
+        String team1 = team1_text.getText().toString().trim();
+        String team2 = team2_text.getText().toString().trim();
+        int score1 = score1_pick.getValue();
+        int score2 = score2_pick.getValue();
 
+        ScorePrediction scorePrediction = new ScorePrediction(user.getUid(), team1, team2, score1, score2);
+
+        firebaseFirestore
+                .collection("scores")
+                .document()
+                .set(scorePrediction)
+                .addOnSuccessListener(command -> Toast.makeText(mContext, "올리기 성공", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(command -> Toast.makeText(mContext, "올리기 실패", Toast.LENGTH_SHORT).show());
     }
 }
